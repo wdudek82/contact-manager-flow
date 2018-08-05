@@ -3,25 +3,43 @@ import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
-// styles
-const Anchor = styled.a`
-  text-decoration: none;
-  color: #000;
+const FAIAugmented = styled(FontAwesomeIcon)`
+  cursor: 'pointer';
+`;
 
-  > i {
-    color: #ffffff;
-  }
+const SortArrow = styled(FAIAugmented)``;
+
+const Times = styled(FAIAugmented).attrs({
+  icon: 'times',
+})`
+  float: right;
+`;
+
+const ListGroup = styled.ul.attrs({
+  className: 'list-group',
+})`
+  display: ${(p) => (p.show ? 'initial' : 'none')};
 `;
 
 type Props = {
   contact: Object,
-}
+};
 
-class Contact extends React.Component<Props, {}> {
+type State = {
+  showContactInfo: boolean,
+};
+
+class Contact extends React.Component<Props, State> {
+  state = {
+    showContactInfo: false,
+  };
+
   onShowClicked = (e: Event) => {
     e.preventDefault();
-    console.log(e.target);
-  }
+    this.setState((prevState) => ({
+      showContactInfo: !prevState.showContactInfo,
+    }));
+  };
 
   render() {
     const { name, email, phone } = this.props.contact;
@@ -30,14 +48,16 @@ class Contact extends React.Component<Props, {}> {
       <div className="card card-body mb-3">
         <h4>
           {name}
-          <Anchor href="/" onClick={this.onShowClicked}>
-            <FontAwesomeIcon icon="sort-down" />
-          </Anchor>
+          <SortArrow
+            onClick={this.onShowClicked}
+            icon={this.state.showContactInfo ? 'sort-down' : 'caret-right'}
+          />
+          <Times onClick={() => console.log('delete')} />
         </h4>
-        <ul className="list-group">
+        <ListGroup show={this.state.showContactInfo}>
           <li className="list-group-item">{email}</li>
           <li className="list-group-item">{phone}</li>
-        </ul>
+        </ListGroup>
       </div>
     );
   }
