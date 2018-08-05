@@ -7,22 +7,30 @@ const FAIAugmented = styled(FontAwesomeIcon)`
   cursor: 'pointer';
 `;
 
-const SortArrow = styled(FAIAugmented)``;
+const SortArrow = styled(FAIAugmented)`
+  transform: ${(p) => (p.show ? 'rotate(0deg)' : 'rotate(-90deg)')};
+  transition: transform 300ms;
+`;
 
-const Times = styled(FAIAugmented).attrs({
+const Delete = styled(FAIAugmented).attrs({
   icon: 'times',
 })`
   float: right;
+  color: #f00;
 `;
 
 const ListGroup = styled.ul.attrs({
   className: 'list-group',
 })`
-  display: ${(p) => (p.show ? 'initial' : 'none')};
+  height: ${(p) => (p.show ? '99px' : '0px')};
+  opacity: ${(p) => (p.show ? 1 : 0)};
+  transition: all 300ms;
+  }
 `;
 
 type Props = {
   contact: Object,
+  delete: (id: number) => void,
 };
 
 type State = {
@@ -42,17 +50,19 @@ class Contact extends React.Component<Props, State> {
   };
 
   render() {
-    const { name, email, phone } = this.props.contact;
+    const { id, name, email, phone } = this.props.contact;
 
     return (
       <div className="card card-body mb-3">
         <h4>
-          {name}
+          {name}{' '}
           <SortArrow
             onClick={this.onShowClicked}
-            icon={this.state.showContactInfo ? 'sort-down' : 'caret-right'}
+            /* icon={this.state.showContactInfo ? 'sort-down' : 'caret-right'} */
+            icon="sort-down"
+            show={this.state.showContactInfo}
           />
-          <Times onClick={() => console.log('delete')} />
+          <Delete onClick={() => this.props.delete(id)} />
         </h4>
         <ListGroup show={this.state.showContactInfo}>
           <li className="list-group-item">{email}</li>

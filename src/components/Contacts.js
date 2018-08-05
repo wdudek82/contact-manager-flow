@@ -31,9 +31,20 @@ class Contacts extends React.Component<{}, {}> {
     ],
   };
 
+  handleDeleteContact = (contactId) => {
+    const updatedContacts = this.state.contacts.filter(
+      (contact) => contact.id !== contactId,
+    );
+    this.setState((prevState) => ({ contacts: updatedContacts }));
+  };
+
   renderContacts() {
     return this.state.contacts.map((contact) => (
-      <Contact key={contact.id} contact={contact} />
+      <Contact
+        key={contact.id}
+        contact={contact}
+        delete={this.handleDeleteContact}
+      />
     ));
   }
 
