@@ -29,7 +29,12 @@ const ListGroup = styled.ul.attrs({
 `;
 
 type Props = {
-  contact: Object,
+  contact: {
+    id: number,
+    name: string,
+    email: string,
+    phone: string,
+  },
   delete: (id: number) => void,
 };
 
