@@ -5,15 +5,16 @@ import { faSortDown, faCaretRight, faTimes } from '@fortawesome/free-solid-svg-i
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Contacts from './components/Contacts';
 import Header from './components/Header';
+import { Provider } from './context';
 
 library.add(faSortDown, faCaretRight, faTimes);
 
 const App = () => {
   return (
-    <div>
+    <Provider>
       <Header branding="Contact Manager" />
       <Contacts />
-    </div>
+    </Provider>
   );
 };
 

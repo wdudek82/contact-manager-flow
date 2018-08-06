@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Contact from './Contact';
+import { Consumer } from '../context';
 
 // styles
 const Wrapper = styled.div.attrs({
@@ -8,29 +9,6 @@ const Wrapper = styled.div.attrs({
 })``;
 
 class Contacts extends React.Component<{}, {}> {
-  state = {
-    contacts: [
-      {
-        id: 1,
-        name: 'Jaś Fasola',
-        email: 'jfasola@example.com',
-        phone: '555-555-5555',
-      },
-      {
-        id: 2,
-        name: 'Karen Smith',
-        email: 'ksmith@example.com',
-        phone: '123-345-5678',
-      },
-      {
-        id: 3,
-        name: 'Henry Johnson',
-        email: 'hjohnson@gmail.com',
-        phone: '877-636-1353',
-      },
-    ],
-  };
-
   handleDeleteContact = (contactId) => {
     const updatedContacts = this.state.contacts.filter(
       (contact) => contact.id !== contactId,
@@ -38,8 +16,8 @@ class Contacts extends React.Component<{}, {}> {
     this.setState((prevState) => ({ contacts: updatedContacts }));
   };
 
-  renderContacts() {
-    return this.state.contacts.map((contact) => (
+  renderContacts({ contacts }) {
+    return contacts.map((contact) => (
       <Contact
         key={contact.id}
         contact={contact}
@@ -49,7 +27,11 @@ class Contacts extends React.Component<{}, {}> {
   }
 
   render() {
-    return <Wrapper>{this.renderContacts()}</Wrapper>;
+    return (
+      <Wrapper>
+        <Consumer>{(value) => this.renderContacts(value)}</Consumer>
+      </Wrapper>
+    );
   }
 }
 
