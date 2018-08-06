@@ -9,12 +9,12 @@ const Wrapper = styled.div.attrs({
 })``;
 
 class Contacts extends React.Component<{}, {}> {
-  handleDeleteContact = (contactId) => {
-    const updatedContacts = this.state.contacts.filter(
-      (contact) => contact.id !== contactId,
-    );
-    this.setState((prevState) => ({ contacts: updatedContacts }));
-  };
+  handleDeleteContact = (id, dispatch) => {
+    dispatch({
+      type: 'DELETE_CONTACT',
+      payload: id,
+    });
+  }
 
   renderContacts({ contacts }) {
     return contacts.map((contact) => (

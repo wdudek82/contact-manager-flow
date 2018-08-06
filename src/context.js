@@ -1,12 +1,27 @@
 // @flow
 import * as React from 'react';
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'DELETE_CONTACT':
+      return {
+        ...state,
+        contacts: state.contacts.filter(
+          (contact) => contact.id !== action.payload,
+        ),
+      };
+    default:
+      return state;
+  }
+};
+
 type Props = {
   children: React.Node,
-}
+};
 
 type State = {
   contacts: Array<{ id: number, name: string, email: string, phone: string }>,
+    dispatch: ({ type: string, payload: number}) => void,
 };
 
 const Context = React.createContext();
@@ -33,6 +48,9 @@ export class Provider extends React.Component<Props, State> {
         phone: '877-636-1353',
       },
     ],
+    dispatch: (action) => {
+      this.setState((state) => reducer(state, action));
+    },
   };
 
   render() {

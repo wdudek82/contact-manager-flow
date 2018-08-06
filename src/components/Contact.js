@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import { Consumer } from '../context';
 
 const FAIAugmented = styled(FontAwesomeIcon)`
   cursor: 'pointer';
@@ -35,11 +36,12 @@ type Props = {
     email: string,
     phone: string,
   },
-  delete: (id: number) => void,
+  delete: (void) => void,
 };
 
 type State = {
   showContactInfo: boolean,
+
 };
 
 class Contact extends React.Component<Props, State> {
@@ -58,22 +60,31 @@ class Contact extends React.Component<Props, State> {
     const { id, name, email, phone } = this.props.contact;
 
     return (
-      <div className="card card-body mb-3">
-        <h4>
-          {name}{' '}
-          <SortArrow
-            onClick={this.onShowClicked}
-            /* icon={this.state.showContactInfo ? 'sort-down' : 'caret-right'} */
-            icon="sort-down"
-            show={this.state.showContactInfo}
-          />
-          <Delete onClick={() => this.props.delete(id)} />
-        </h4>
-        <ListGroup show={this.state.showContactInfo}>
-          <li className="list-group-item">{email}</li>
-          <li className="list-group-item">{phone}</li>
-        </ListGroup>
-      </div>
+      <Consumer>
+        {(value) => {
+          const { dispatch } = value;
+
+          return (
+            <div className="card card-body mb-3">
+              <h4>
+                {name}{' '}
+                <SortArrow
+                  onClick={this.onShowClicked}
+                  icon="sort-down"
+                  show={this.state.showContactInfo}
+                />
+                <Delete
+                  onClick={this.props.delete.bind(this, id, dispatch)}
+                />
+              </h4>
+              <ListGroup show={this.state.showContactInfo}>
+                <li className="list-group-item">{email}</li>
+                <li className="list-group-item">{phone}</li>
+              </ListGroup>
+            </div>
+          );
+        }}
+      </Consumer>
     );
   }
 }
