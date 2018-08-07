@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import styled from 'styled-components';
 import Contact from './Contact';
@@ -8,20 +9,22 @@ const Wrapper = styled.div.attrs({
   className: 'container',
 })``;
 
-class Contacts extends React.Component<{}, {}> {
-  handleDeleteContact = (id, dispatch) => {
+type Props = {};
+
+class Contacts extends React.Component<Props, {}> {
+  handleDeleteContact = (id: number, dispatch: (any) => void) => {
     dispatch({
       type: 'DELETE_CONTACT',
       payload: id,
     });
-  }
+  };
 
-  renderContacts({ contacts }) {
+  renderContacts({ contacts }: Object) {
     return contacts.map((contact) => (
       <Contact
         key={contact.id}
         contact={contact}
-        delete={this.handleDeleteContact}
+        delete={(id: number, dispatch: (any) => void) => this.handleDeleteContact(id, dispatch)}
       />
     ));
   }
@@ -29,7 +32,9 @@ class Contacts extends React.Component<{}, {}> {
   render() {
     return (
       <Wrapper>
-        <Consumer>{(value) => this.renderContacts(value)}</Consumer>
+        <Consumer>
+          {(value = {}) => this.renderContacts(value)}
+        </Consumer>
       </Wrapper>
     );
   }

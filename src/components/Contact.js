@@ -36,7 +36,7 @@ type Props = {
     email: string,
     phone: string,
   },
-  delete: (void) => void,
+  delete: (id: number, dispatch: (any) => void) => void,
 };
 
 type State = {
@@ -61,7 +61,7 @@ class Contact extends React.Component<Props, State> {
 
     return (
       <Consumer>
-        {(value) => {
+        {(value = {}) => {
           const { dispatch } = value;
 
           return (
@@ -73,9 +73,11 @@ class Contact extends React.Component<Props, State> {
                   icon="sort-down"
                   show={this.state.showContactInfo}
                 />
+                {/* eslint-disable react/jsx-no-bind */}
                 <Delete
                   onClick={this.props.delete.bind(this, id, dispatch)}
                 />
+                {/* eslint-enable react/jsx-no-bind */}
               </h4>
               <ListGroup show={this.state.showContactInfo}>
                 <li className="list-group-item">{email}</li>

@@ -16,17 +16,22 @@ const reducer = (state, action) => {
 };
 
 type Props = {
-  children: React.Node,
+  children?: React.Node,
 };
 
 type State = {
   contacts: Array<{ id: number, name: string, email: string, phone: string }>,
-    dispatch: ({ type: string, payload: number}) => void,
+    dispatch: ({ type: string, payload: any }) => void,
 };
 
 const Context = React.createContext();
 
 export class Provider extends React.Component<Props, State> {
+  static defaultProps = {
+    children: {},
+  };
+
+  /* eslint-disable react/no-unused-state */
   state = {
     contacts: [
       {
@@ -48,10 +53,11 @@ export class Provider extends React.Component<Props, State> {
         phone: '877-636-1353',
       },
     ],
-    dispatch: (action) => {
+    dispatch: (action: { type: string, payload: any }) => {
       this.setState((state) => reducer(state, action));
     },
   };
+  /* eslint-enable-block react/no-unused-state */
 
   render() {
     return (
