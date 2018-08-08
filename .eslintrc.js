@@ -7,6 +7,13 @@ module.exports = {
     node: true,
     jest: true,
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        moduleDirectory: ['node_modules', 'src'],
+      },
+    },
+  },
   rules: {
     'arrow-body-style': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
@@ -58,5 +65,5 @@ module.exports = {
     'jsx-a11y/label-has-for': 0,
     'implicit-arrow-linebreak': 0,
     'no-confusing-arrow': 0,
-  },
+  }
 };

@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import styled from 'styled-components';
+import { Consumer } from 'context';
 import Contact from './Contact';
-import { Consumer } from '../context';
 
 // styles
 const Wrapper = styled.div.attrs({
@@ -24,7 +24,9 @@ class Contacts extends React.Component<Props, {}> {
       <Contact
         key={contact.id}
         contact={contact}
-        delete={(id: number, dispatch: (any) => void) => this.handleDeleteContact(id, dispatch)}
+        delete={(id: number, dispatch: (any) => void) =>
+          this.handleDeleteContact(id, dispatch)
+        }
       />
     ));
   }
@@ -32,9 +34,7 @@ class Contacts extends React.Component<Props, {}> {
   render() {
     return (
       <Wrapper>
-        <Consumer>
-          {(value = {}) => this.renderContacts(value)}
-        </Consumer>
+        <Consumer>{(value = {}) => this.renderContacts(value)}</Consumer>
       </Wrapper>
     );
   }

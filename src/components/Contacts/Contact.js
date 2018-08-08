@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { Consumer } from '../context';
+import { Consumer } from 'context';
 
 const FAIAugmented = styled(FontAwesomeIcon)`
   cursor: 'pointer';
