@@ -1,6 +1,9 @@
-// @flow
 import * as React from 'react';
-// import { Consumer } from 'context';
+import { Consumer } from 'context';
+import TextInputGroup from 'components/Layout/TextInputGroup';
+import uuid from 'uuid';
+
+type Props = {};
 
 type State = {
   name: string,
@@ -8,7 +11,7 @@ type State = {
   phone: string,
 };
 
-class AddContact extends React.Component<{}, State> {
+class AddContact extends React.Component<Props, State> {
   state = {
     name: '',
     email: '',
@@ -37,71 +40,72 @@ class AddContact extends React.Component<{}, State> {
     }
   };
 
-  handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  handleSubmit = (dispatch, e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(this.state);
+    console.log(arguments);
 
-    // dispatch({
-    //   type: 'ADD_CONTACT',
-    // payload: {
-    // }
-    // })
+    const { name, email, phone } = this.state;
+
+    if (name && email && phone) {
+      const newContact = {
+        id: uuid(),
+        name,
+        email,
+        phone,
+      };
+
+      dispatch({ type: 'ADD_CONTACT', payload: newContact });
+
+      this.setState(() => ({ name: '', email: '', phone: '' }));
+    }
   };
 
   render() {
     const { name, email, phone } = this.state;
 
     return (
-      <div className="card mb-3">
-        <div className="card-header">Add Contact</div>
+      <Consumer>
+        {(value = {}) => {
+          const { dispatch } = value;
 
-        <div className="card-body">
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={name}
-                onChange={this.handleInputChange}
-                placeholder="name"
-                className="form-control"
-              />
+          return (
+            <div>
+              <div className="card mb-3">
+                <div className="card-header">Add Contact</div>
+
+                <div className="card-body">
+                  <form onSubmit={this.handleSubmit.bind(this, dispatch)}>
+                    <TextInputGroup
+                      name="name"
+                      value={name}
+                      placeholder="name"
+                      change={this.handleInputChange}
+                    />
+                    <TextInputGroup
+                      name="email"
+                      value={email}
+                      placeholder="email"
+                      change={this.handleInputChange}
+                    />
+                    <TextInputGroup
+                      name="phone"
+                      value={phone}
+                      placeholder="phone"
+                      change={this.handleInputChange}
+                    />
+                    <input
+                      type="submit"
+                      value="Add Contact"
+                      className="btn btn-block btn-light"
+                    />
+                  </form>
+                </div>
+              </div>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={this.handleInputChange}
-                placeholder="email"
-                className="form-control"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
-                type="text"
-                name="phone"
-                value={phone}
-                onChange={this.handleInputChange}
-                placeholder="phone"
-                className="form-control"
-              />
-            </div>
-
-            <input
-              type="submit"
-              value="Add Contact"
-              className="btn btn-block btn-light"
-            />
-          </form>
-        </div>
-      </div>
+          );
+        }}
+      </Consumer>
     );
   }
 }

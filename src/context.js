@@ -11,12 +11,10 @@ const reducer = (state, action) => {
         ),
       };
     case 'ADD_CONTACT':
+      console.log('add item');
       return {
         ...state,
-        contacts: [
-          ...state.contacts,
-          action.payload,
-        ],
+        contacts: [...state.contacts, action.payload],
       };
     default:
       return state;
@@ -29,7 +27,7 @@ type Props = {
 
 type State = {
   contacts: Array<{ id: number, name: string, email: string, phone: string }>,
-    dispatch: ({ type: string, payload: any }) => void,
+  dispatch: ({ type: string, payload: any }) => void,
 };
 
 const Context = React.createContext();
