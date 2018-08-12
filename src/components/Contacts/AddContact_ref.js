@@ -2,55 +2,48 @@
 import * as React from 'react';
 // import { Consumer } from 'context';
 
-type State = {
-  name: string,
-  email: string,
-  phone: string,
+type Props = {
+  name?: string,
+  email?: string,
+  phone?: string,
 };
 
-class AddContact extends React.Component<{}, State> {
-  state = {
-    name: '',
-    email: '',
-    phone: '',
+class AddContact extends React.Component<Props, {}> {
+  static defaultProps = {
+    name: 'Fred Smith',
+    email: 'fred.smith@example.com',
+    phone: '00 123 453 9353',
   };
 
-  handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.name);
-    const updatedValue = e.currentTarget.value;
-
-    switch (e.currentTarget.name) {
-      case 'name': {
-        this.setState(() => ({ name: updatedValue }));
-        break;
-      }
-      case 'email': {
-        this.setState(() => ({ email: updatedValue }));
-        break;
-      }
-      case 'phone': {
-        this.setState(() => ({ phone: updatedValue }));
-        break;
-      }
-      default:
-        break;
-    }
-  };
+  constructor(props: Props) {
+    super(props);
+    this.nameInput = React.createRef();
+    this.emailInput = React.createRef();
+    this.phoneInput = React.createRef();
+  }
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(this.state);
+    const contact = {
+      name: this.nameInput.current.value,
+      email: this.emailInput.current.value,
+      phone: this.phoneInput.current.value,
+    };
 
-    // dispatch({
-    //   type: 'ADD_CONTACT',
-    // payload: {
-    // }
-    // })
+    console.log(contact);
   };
 
+  nameInput: ?HTMLInputElement;
+
+  emailInput: ?HTMLInputElement;
+
+  phoneInput: ?HTMLInputElement;
+
   render() {
-    const { name, email, phone } = this.state;
+    const { name, email, phone } = this.props;
+
+    console.log('Props', name, email, phone);
 
     return (
       <div className="card mb-3">
@@ -63,10 +56,10 @@ class AddContact extends React.Component<{}, State> {
               <input
                 type="text"
                 name="name"
-                value={name}
-                onChange={this.handleInputChange}
+                defaultValue={name}
                 placeholder="name"
                 className="form-control"
+                ref={this.nameInput}
               />
             </div>
 
@@ -75,10 +68,10 @@ class AddContact extends React.Component<{}, State> {
               <input
                 type="email"
                 name="email"
-                value={email}
-                onChange={this.handleInputChange}
+                defaultValue={email}
                 placeholder="email"
                 className="form-control"
+                ref={this.emailInput}
               />
             </div>
 
@@ -87,10 +80,10 @@ class AddContact extends React.Component<{}, State> {
               <input
                 type="text"
                 name="phone"
-                value={phone}
-                onChange={this.handleInputChange}
+                defaultValue={phone}
                 placeholder="phone"
                 className="form-control"
+                ref={this.phoneInput}
               />
             </div>
 

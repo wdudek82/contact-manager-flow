@@ -3,6 +3,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Consumer } from 'context';
 import Contact from './Contact';
+// import AddContact from './AddContact';
+import AddContact from './AddContact';
 
 // styles
 const Wrapper = styled.div.attrs({
@@ -34,6 +36,7 @@ class Contacts extends React.Component<Props, {}> {
   render() {
     return (
       <Wrapper>
+        <AddContact />
         <Consumer>{(value = {}) => this.renderContacts(value)}</Consumer>
       </Wrapper>
     );
