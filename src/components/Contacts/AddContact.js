@@ -3,7 +3,9 @@ import { Consumer } from 'context';
 import TextInputGroup from 'components/Layout/TextInputGroup';
 import uuid from 'uuid';
 
-type Props = {};
+type Props = {
+  history: Object,
+};
 
 type State = {
   name: string,
@@ -75,6 +77,8 @@ class AddContact extends React.Component<Props, State> {
       dispatch({ type: 'ADD_CONTACT', payload: newContact });
 
       this.setState(() => ({ name: '', email: '', phone: '', errors: {} }));
+
+      this.props.history.push('/');
     }
   };
 
