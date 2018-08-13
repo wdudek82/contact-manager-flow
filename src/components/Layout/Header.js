@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {
   branding?: string,
-}
+};
 
 const Header = (props: Props) => {
   const { branding } = props;
@@ -17,7 +19,18 @@ const Header = (props: Props) => {
         <div>
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-              <a href="/" className="nav-link">Home</a>
+              <NavLink exact to="/" className="nav-link">
+                <FontAwesomeIcon icon="home" />{' '}
+                Home
+              </NavLink>
+              <NavLink to="/about" className="nav-link">
+                <FontAwesomeIcon icon="question" />{' '}
+                About
+              </NavLink>
+              <NavLink to="/contact/add" className="nav-link">
+                <FontAwesomeIcon icon="plus" />{' '}
+                Add Contact
+              </NavLink>
             </li>
           </ul>
         </div>

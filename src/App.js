@@ -6,6 +6,9 @@ import {
   faSortDown,
   faCaretRight,
   faTimes,
+  faHome,
+  faPlus,
+  faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Contacts from 'components/Contacts/Contacts';
@@ -14,21 +17,24 @@ import Header from 'components/Layout/Header';
 import About from 'components/Pages/About';
 import { Provider } from 'context';
 
-library.add(faSortDown, faCaretRight, faTimes);
+library.add(faSortDown, faCaretRight, faTimes, faHome, faPlus, faQuestion);
 
 const App = () => {
   return (
     <Provider>
       <Router>
         <div>
-          <Header branding="Contact Manager" />
           <Router>
-            <div className="container">
-              <Switch>
-                <Route exact path="/" component={Contacts} />
-                <Route path="/about" component={About} />
-                <Route path="/contact/add" component={AddContact} />
-              </Switch>
+            <div>
+              <Header branding="Contact Manager" />
+              <div className="container">
+                <Switch>
+                  <Route exact path="/" component={Contacts} />
+                  {/* <Route path="/about/:id" component={About} /> */}
+                  <Route path="/about" component={About} />
+                  <Route path="/contact/add" component={AddContact} />
+                </Switch>
+              </div>
             </div>
           </Router>
         </div>
