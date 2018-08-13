@@ -1,12 +1,15 @@
 // @flow
 import * as React from 'react';
+import axios from 'axios';
 import { Consumer } from 'context';
 import Contact from './Contact';
 
 type Props = {};
 
 class Contacts extends React.Component<Props, {}> {
-  handleDeleteContact = (id: number, dispatch: (any) => void) => {
+  handleDeleteContact = async (id: number, dispatch: (any) => void) => {
+    await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+
     dispatch({
       type: 'DELETE_CONTACT',
       payload: id,

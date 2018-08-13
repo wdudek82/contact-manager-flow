@@ -16,6 +16,7 @@ import AddContact from 'components/Contacts/AddContact';
 import Header from 'components/Layout/Header';
 import About from 'components/Pages/About';
 import NotFound from 'components/Pages/NotFound';
+import Test from 'components/test/Test';
 import { Provider } from 'context';
 
 library.add(faSortDown, faCaretRight, faTimes, faHome, faPlus, faQuestion);
@@ -34,6 +35,7 @@ const App = () => {
                   {/* <Route path="/about/:id" component={About} /> */}
                   <Route path="/about" component={About} />
                   <Route path="/contact/add" component={AddContact} />
+                  <Route path="/test" component={Test} />
                   <Route component={NotFound} />
                 </Switch>
               </div>
