@@ -1,14 +1,17 @@
 import * as React from 'react';
+import axios from 'axios';
 import { Consumer } from 'context';
 import TextInputGroup from 'components/Layout/TextInputGroup';
-import uuid from 'uuid';
 
-type Props = {};
+type Props = {
+  history: Object,
+};
 
 type State = {
   name: string,
   email: string,
   phone: string,
+  errors: Object,
 };
 
 class AddContact extends React.Component<Props, State> {
@@ -16,6 +19,7 @@ class AddContact extends React.Component<Props, State> {
     name: '',
     email: '',
     phone: '',
+    errors: {},
   };
 
   handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -40,29 +44,47 @@ class AddContact extends React.Component<Props, State> {
     }
   };
 
-  handleSubmit = (dispatch, e: SyntheticEvent<HTMLFormElement>) => {
+  handleSubmit = async (dispatch, e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(arguments);
 
     const { name, email, phone } = this.state;
 
+    // Check for errors
+    if (name === '') {
+      this.setState((prevState) => ({
+        errors: { ...prevState.errors, name: 'Name is required' },
+      }));
+    }
+    if (email === '') {
+      this.setState((prevState) => ({
+        errors: { ...prevState.errors, email: 'Email is required' },
+      }));
+    }
+    if (phone === '') {
+      this.setState((prevState) => ({
+        errors: { ...prevState.errors, phone: 'Phone is required' },
+      }));
+    }
+
     if (name && email && phone) {
       const newContact = {
-        id: uuid(),
         name,
         email,
         phone,
       };
 
+      await axios.post('https://jsonplaceholder.typicode.com/users', newContact);
+
       dispatch({ type: 'ADD_CONTACT', payload: newContact });
 
-      this.setState(() => ({ name: '', email: '', phone: '' }));
+      this.setState(() => ({ name: '', email: '', phone: '', errors: {} }));
+
+      this.props.history.push('/');
     }
   };
 
   render() {
-    const { name, email, phone } = this.state;
+    const { name, email, phone, errors } = this.state;
 
     return (
       <Consumer>
@@ -81,18 +103,21 @@ class AddContact extends React.Component<Props, State> {
                       value={name}
                       placeholder="name"
                       change={this.handleInputChange}
+                      error={errors.name}
                     />
                     <TextInputGroup
                       name="email"
                       value={email}
                       placeholder="email"
                       change={this.handleInputChange}
+                      error={errors.email}
                     />
                     <TextInputGroup
                       name="phone"
                       value={phone}
                       placeholder="phone"
                       change={this.handleInputChange}
+                      error={errors.phone}
                     />
                     <input
                       type="submit"

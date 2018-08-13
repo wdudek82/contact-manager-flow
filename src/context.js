@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import axios from 'axios';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -64,6 +65,21 @@ export class Provider extends React.Component<Props, State> {
     },
   };
   /* eslint-enable-block react/no-unused-state */
+
+  // First version
+  // componentDidMount() {
+  //   axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
+  //     this.setState(() => ({ contacts: response.data }));
+  //   });
+  // }
+
+  async componentDidMount() {
+    const res = await axios.get('https://jsonplaceholder.typicode.com/users');
+
+    console.log(res.data);
+
+    this.setState({ contacts: res.data });
+  }
 
   render() {
     return (

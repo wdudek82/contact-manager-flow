@@ -1,20 +1,15 @@
 // @flow
 import * as React from 'react';
-import styled from 'styled-components';
+import axios from 'axios';
 import { Consumer } from 'context';
 import Contact from './Contact';
-// import AddContact from './AddContact';
-import AddContact from './AddContact';
-
-// styles
-const Wrapper = styled.div.attrs({
-  className: 'container',
-})``;
 
 type Props = {};
 
 class Contacts extends React.Component<Props, {}> {
-  handleDeleteContact = (id: number, dispatch: (any) => void) => {
+  handleDeleteContact = async (id: number, dispatch: (any) => void) => {
+    await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+
     dispatch({
       type: 'DELETE_CONTACT',
       payload: id,
@@ -35,10 +30,12 @@ class Contacts extends React.Component<Props, {}> {
 
   render() {
     return (
-      <Wrapper>
-        <AddContact />
+      <React.Fragment>
+        <h1 className="display-4 mb-2">
+          <span className="text-danger">Contact</span> List
+        </h1>
         <Consumer>{(value = {}) => this.renderContacts(value)}</Consumer>
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
