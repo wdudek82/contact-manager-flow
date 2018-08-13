@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classnames from 'classnames';
 
 type Props = {
   type?: string,
@@ -7,6 +8,7 @@ type Props = {
   value: string,
   placeholder: string,
   change: (SyntheticEvent<any>) => void,
+  error: Object,
 };
 
 function toTitleCase(str: string) {
@@ -14,7 +16,7 @@ function toTitleCase(str: string) {
 }
 
 const TextInputInput = (props: Props) => {
-  const { type, name, value, placeholder, change } = props;
+  const { type, name, value, placeholder, change, error } = props;
 
   return (
     <div className="form-group">
@@ -25,8 +27,11 @@ const TextInputInput = (props: Props) => {
         value={value}
         onChange={change}
         placeholder={placeholder}
-        className="form-control"
+        className={classnames('form-control form-control-lg', {
+          'is-invalid': error,
+        })}
       />
+      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };
