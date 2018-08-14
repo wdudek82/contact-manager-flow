@@ -35,6 +35,7 @@ class EditContact extends React.Component<Props, State> {
     const { contact } = this.props;
 
     this.setState(() => ({
+      id: contact.id,
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
@@ -42,8 +43,9 @@ class EditContact extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    const { name, email, phone } = nextProps.contact;
+    const { id, name, email, phone } = nextProps.contact;
     this.setState(() => ({
+      id,
       name,
       email,
       phone,
@@ -51,7 +53,6 @@ class EditContact extends React.Component<Props, State> {
   }
 
   handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.name);
     const updatedValue = e.currentTarget.value;
 
     switch (e.currentTarget.name) {
@@ -76,7 +77,6 @@ class EditContact extends React.Component<Props, State> {
     e.preventDefault();
 
     const { name, email, phone } = this.state;
-    const { id } = this.props.match.params;
 
     // Check for errors
     if (name === '') {
@@ -95,14 +95,8 @@ class EditContact extends React.Component<Props, State> {
       }));
     }
 
-    const updateContact = {
-      name,
-      email,
-      phone,
-    };
-
     if (name && email && phone) {
-      this.props.editContact(id, updateContact);
+      this.props.editContact(this.state);
 
       this.setState(() => ({ name: '', email: '', phone: '', errors: {} }));
       this.props.history.push('/');
