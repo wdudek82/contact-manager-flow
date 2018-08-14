@@ -32,19 +32,21 @@ const initialState = {
 
 function contactReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_CONTACTS:
+    case GET_CONTACTS: {
       return {
         ...state,
         contacts: [
           ...action.payload,
         ],
       };
-    case GET_CONTACT:
+    }
+    case GET_CONTACT: {
       return {
         ...state,
         contact: action.payload,
       };
-    case ADD_CONTACT:
+    }
+    case ADD_CONTACT: {
       return {
         ...state,
         contacts: [
@@ -52,6 +54,7 @@ function contactReducer(state = initialState, action) {
           action.payload,
         ],
       };
+    }
     case EDIT_CONTACT: {
       const updatedContacts = state.contacts.map((contact) => (
         contact.id === action.payload.id ? action.payload : contact

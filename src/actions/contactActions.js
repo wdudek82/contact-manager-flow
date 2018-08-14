@@ -9,6 +9,7 @@ import {
 } from './types';
 
 type Contact = {
+  id: number,
   name: string,
   email: string,
   phone: string,
@@ -57,11 +58,11 @@ export const deleteContact = (id: number) => async (dispatch: Function) => {
   });
 };
 
-export const editContact = (id: number, updatedContact: Contact) => async (
+export const editContact = (updatedContact: Contact) => async (
   dispatch: Function,
 ) => {
   const res = await axios.put(
-    `https://jsonplaceholder.typicode.com/users/${id}`,
+    `https://jsonplaceholder.typicode.com/users/${updatedContact.id}`,
     updatedContact,
   );
 
