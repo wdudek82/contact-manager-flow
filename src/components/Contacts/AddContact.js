@@ -1,10 +1,13 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Consumer } from 'context';
+import { connect } from 'react-redux';
+import { addContact } from 'actions/contactActions';
 import TextInputGroup from 'components/Layout/TextInputGroup';
+import uuid from 'uuid';
 
 type Props = {
   history: Object,
+  addContact: (Object) => void,
 };
 
 type State = {
@@ -23,7 +26,6 @@ class AddContact extends React.Component<Props, State> {
   };
 
   handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.name);
     const updatedValue = e.currentTarget.value;
 
     switch (e.currentTarget.name) {
@@ -44,7 +46,7 @@ class AddContact extends React.Component<Props, State> {
     }
   };
 
-  handleSubmit = async (dispatch, e: SyntheticEvent<HTMLFormElement>) => {
+  handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { name, email, phone } = this.state;
@@ -68,14 +70,13 @@ class AddContact extends React.Component<Props, State> {
 
     if (name && email && phone) {
       const newContact = {
+        id: uuid(),
         name,
         email,
         phone,
       };
 
-      await axios.post('https://jsonplaceholder.typicode.com/users', newContact);
-
-      dispatch({ type: 'ADD_CONTACT', payload: newContact });
+      this.props.addContact(newContact);
 
       this.setState(() => ({ name: '', email: '', phone: '', errors: {} }));
 
@@ -87,52 +88,44 @@ class AddContact extends React.Component<Props, State> {
     const { name, email, phone, errors } = this.state;
 
     return (
-      <Consumer>
-        {(value = {}) => {
-          const { dispatch } = value;
+      <div>
+        <div className="card mb-3">
+          <div className="card-header">Add Contact</div>
 
-          return (
-            <div>
-              <div className="card mb-3">
-                <div className="card-header">Add Contact</div>
-
-                <div className="card-body">
-                  <form onSubmit={this.handleSubmit.bind(this, dispatch)}>
-                    <TextInputGroup
-                      name="name"
-                      value={name}
-                      placeholder="name"
-                      change={this.handleInputChange}
-                      error={errors.name}
-                    />
-                    <TextInputGroup
-                      name="email"
-                      value={email}
-                      placeholder="email"
-                      change={this.handleInputChange}
-                      error={errors.email}
-                    />
-                    <TextInputGroup
-                      name="phone"
-                      value={phone}
-                      placeholder="phone"
-                      change={this.handleInputChange}
-                      error={errors.phone}
-                    />
-                    <input
-                      type="submit"
-                      value="Add Contact"
-                      className="btn btn-block btn-light"
-                    />
-                  </form>
-                </div>
-              </div>
-            </div>
-          );
-        }}
-      </Consumer>
+          <div className="card-body">
+            <form onSubmit={this.handleSubmit}>
+              <TextInputGroup
+                name="name"
+                value={name}
+                placeholder="name"
+                change={this.handleInputChange}
+                error={errors.name}
+              />
+              <TextInputGroup
+                name="email"
+                value={email}
+                placeholder="email"
+                change={this.handleInputChange}
+                error={errors.email}
+              />
+              <TextInputGroup
+                name="phone"
+                value={phone}
+                placeholder="phone"
+                change={this.handleInputChange}
+                error={errors.phone}
+              />
+              <input
+                type="submit"
+                value="Add Contact"
+                className="btn btn-block btn-light"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
     );
   }
 }
 
-export default AddContact;
+export default connect(null, { addContact })(AddContact);

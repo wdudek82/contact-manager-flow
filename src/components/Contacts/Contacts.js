@@ -1,29 +1,32 @@
 // @flow
 import * as React from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
-import { Consumer } from 'context';
+import { getContacts, deleteContact } from 'actions/contactActions';
 import Contact from './Contact';
 
-type Props = {};
+type Props = {
+  contacts: Array<Object>,
+  getContacts: (void) => void,
+  deleteContact: (number) => void,
+};
 
 class Contacts extends React.Component<Props, {}> {
-  handleDeleteContact = async (id: number, dispatch: (any) => void) => {
-    await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+  componentDidMount() {
+    this.props.getContacts();
+  }
 
-    dispatch({
-      type: 'DELETE_CONTACT',
-      payload: id,
-    });
+  handleDeleteContact = async (id: number) => {
+    // await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+    this.props.deleteContact(id);
   };
 
-  renderContacts({ contacts }: Object) {
+  renderContacts(contacts: Array<Object>) {
     return contacts.map((contact) => (
       <Contact
         key={contact.id}
         contact={contact}
-        delete={(id: number, dispatch: (any) => void) =>
-          this.handleDeleteContact(id, dispatch)
-        }
+        delete={() => this.handleDeleteContact(contact.id)}
       />
     ));
   }
@@ -34,10 +37,16 @@ class Contacts extends React.Component<Props, {}> {
         <h1 className="display-4 mb-2">
           <span className="text-danger">Contact</span> List
         </h1>
-        <Consumer>{(value = {}) => this.renderContacts(value)}</Consumer>
+        {this.renderContacts(this.props.contacts)}
       </React.Fragment>
     );
   }
 }
 
-export default Contacts;
+function mapStateToProps(state) {
+  return {
+    contacts: state.contact.contacts,
+  };
+}
+
+export default connect(mapStateToProps, { getContacts, deleteContact })(Contacts);
