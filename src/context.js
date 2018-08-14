@@ -12,11 +12,20 @@ const reducer = (state, action) => {
         ),
       };
     case 'ADD_CONTACT':
-      console.log('add item');
       return {
         ...state,
         contacts: [...state.contacts, action.payload],
       };
+    case 'UPDATE_CONTACT': {
+      const updatedContacts = state.contacts.map((contact) => (
+        contact.id === action.payload.id ? action.payload : contact
+      ));
+
+      return {
+        ...state,
+        contacts: updatedContacts,
+      };
+    }
     default:
       return state;
   }
