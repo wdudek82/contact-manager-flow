@@ -23,10 +23,14 @@ const Header = (props: Props) => {
                 <FontAwesomeIcon icon="home" />{' '}
                 Home
               </NavLink>
+            </li>
+            <li>
               <NavLink to="/about" className="nav-link">
                 <FontAwesomeIcon icon="question" />{' '}
                 About
               </NavLink>
+            </li>
+            <li>
               <NavLink to="/contact/add" className="nav-link">
                 <FontAwesomeIcon icon="plus" />{' '}
                 Add Contact

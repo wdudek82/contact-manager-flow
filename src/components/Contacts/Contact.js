@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { Consumer } from 'context';
@@ -20,6 +21,14 @@ const Delete = styled(FAIAugmented).attrs({
   color: #f00;
 `;
 
+const Pencil = styled(FAIAugmented).attrs({
+  icon: 'pencil-alt',
+})`
+  float: right;
+  color: #000;
+  margin-right: 1rem;
+`;
+
 const ListGroup = styled.ul.attrs({
   className: 'list-group',
 })`
@@ -36,7 +45,7 @@ type Props = {
     email: string,
     phone: string,
   },
-  delete: (id: number, dispatch: (any) => void) => void,
+  delete: (id: number, dispatch: (any) => void) => any,
 };
 
 type State = {
@@ -77,6 +86,9 @@ class Contact extends React.Component<Props, State> {
                 <Delete
                   onClick={this.props.delete.bind(this, id, dispatch)}
                 />
+                <Link to={`/contact/edit/${id}`}>
+                  <Pencil />{' '}
+                </Link>
                 {/* eslint-enable react/jsx-no-bind */}
               </h4>
               <ListGroup show={this.state.showContactInfo}>
