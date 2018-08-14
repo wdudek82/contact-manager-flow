@@ -1,12 +1,15 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Consumer } from 'context';
+import { connect } from 'react-redux';
+import { getContact, editContact } from 'actions/contactActions';
 import TextInputGroup from 'components/Layout/TextInputGroup';
-import Contact from './Contact';
 
 type Props = {
+  contact: Object,
   history: Object,
   match: Object,
+  getContact: Function,
+  editContact: Function,
 };
 
 type State = {
@@ -24,18 +27,26 @@ class EditContact extends React.Component<Props, State> {
     errors: {},
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { id } = this.props.match.params;
-    const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/users/${id}`,
-    );
 
-    const contact = res.data;
+    this.props.getContact(id);
+
+    const { contact } = this.props;
 
     this.setState(() => ({
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
+    }));
+  }
+
+  componentWillReceiveProps(nextProps, nextState) {
+    const { name, email, phone } = nextProps.contact;
+    this.setState(() => ({
+      name,
+      email,
+      phone,
     }));
   }
 
@@ -61,7 +72,7 @@ class EditContact extends React.Component<Props, State> {
     }
   };
 
-  handleSubmit = async (dispatch, e: SyntheticEvent<HTMLFormElement>) => {
+  handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { name, email, phone } = this.state;
@@ -91,11 +102,8 @@ class EditContact extends React.Component<Props, State> {
     };
 
     if (name && email && phone) {
-      const res = await axios.put(
-        `https://jsonplaceholder.typicode.com/users/${id}`,
-        updateContact,
-      );
-      dispatch({ type: 'UPDATE_CONTACT', payload: res.data });
+      this.props.editContact(id, updateContact);
+
       this.setState(() => ({ name: '', email: '', phone: '', errors: {} }));
       this.props.history.push('/');
     }
@@ -105,52 +113,53 @@ class EditContact extends React.Component<Props, State> {
     const { name, email, phone, errors } = this.state;
 
     return (
-      <Consumer>
-        {(value = {}) => {
-          const { dispatch } = value;
+      <div>
+        <div className="card mb-3">
+          <div className="card-header">Edit Contact</div>
 
-          return (
-            <div>
-              <div className="card mb-3">
-                <div className="card-header">Edit Contact</div>
-
-                <div className="card-body">
-                  <form onSubmit={this.handleSubmit.bind(this, dispatch)}>
-                    <TextInputGroup
-                      name="name"
-                      value={name}
-                      placeholder="name"
-                      change={this.handleInputChange}
-                      error={errors.name}
-                    />
-                    <TextInputGroup
-                      name="email"
-                      value={email}
-                      placeholder="email"
-                      change={this.handleInputChange}
-                      error={errors.email}
-                    />
-                    <TextInputGroup
-                      name="phone"
-                      value={phone}
-                      placeholder="phone"
-                      change={this.handleInputChange}
-                      error={errors.phone}
-                    />
-                    <input
-                      type="submit"
-                      value="Update Contact"
-                      className="btn btn-block btn-light"
-                    />
-                  </form>
-                </div>
-              </div>
-            </div>
-          );
-        }}
-      </Consumer>
+          <div className="card-body">
+            <form onSubmit={this.handleSubmit}>
+              <TextInputGroup
+                name="name"
+                value={name}
+                placeholder="name"
+                change={this.handleInputChange}
+                error={errors.name}
+              />
+              <TextInputGroup
+                name="email"
+                value={email}
+                placeholder="email"
+                change={this.handleInputChange}
+                error={errors.email}
+              />
+              <TextInputGroup
+                name="phone"
+                value={phone}
+                placeholder="phone"
+                change={this.handleInputChange}
+                error={errors.phone}
+              />
+              <input
+                type="submit"
+                value="Update Contact"
+                className="btn btn-block btn-light"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
     );
   }
 }
 
-export default EditContact;
+function mapStateToProps(state) {
+  return {
+    contact: state.contact.contact,
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { getContact, editContact },
+)(EditContact);

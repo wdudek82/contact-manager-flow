@@ -1,5 +1,6 @@
 import {
   GET_CONTACTS,
+  GET_CONTACT,
   ADD_CONTACT,
   EDIT_CONTACT,
   DELETE_CONTACT,
@@ -26,12 +27,23 @@ const initialState = {
       phone: '555-555-5555',
     },
   ],
+  contact: {},
 };
 
 function contactReducer(state = initialState, action) {
   switch (action.type) {
     case GET_CONTACTS:
-      return state;
+      return {
+        ...state,
+        contacts: [
+          ...action.payload,
+        ],
+      };
+    case GET_CONTACT:
+      return {
+        ...state,
+        contact: action.payload,
+      };
     case ADD_CONTACT:
       return {
         ...state,
@@ -40,6 +52,16 @@ function contactReducer(state = initialState, action) {
           action.payload,
         ],
       };
+    case EDIT_CONTACT: {
+      const updatedContacts = state.contacts.map((contact) => (
+        contact.id === action.payload.id ? action.payload : contact
+      ));
+
+      return {
+        ...state,
+        contacts: updatedContacts,
+      };
+    }
     case DELETE_CONTACT: {
       const updatedContacts = state.contacts.filter((contact) => (
         contact.id !== action.payload
