@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -19,7 +20,8 @@ import Header from 'components/Layout/Header';
 import About from 'components/Pages/About';
 import NotFound from 'components/Pages/NotFound';
 import Test from 'components/test/Test';
-import { Provider } from 'context';
+// import { Provider } from 'context';
+import store from 'store';
 
 library.add(
   faSortDown,
@@ -33,7 +35,7 @@ library.add(
 
 const App = () => {
   return (
-    <Provider>
+    <Provider store={store}>
       <Router>
         <div>
           <Router>
